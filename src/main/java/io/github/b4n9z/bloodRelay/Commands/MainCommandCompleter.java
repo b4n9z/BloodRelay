@@ -13,26 +13,32 @@ public class MainCommandCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completions = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
 
         if (args.length == 1) {
             if (sender.hasPermission("br.transferMaxHealth")) {
-                completions.add("transferMaxHealth");
+                commands.add("transferMaxHealth");
             }
             if (sender.hasPermission("br.transferHealth")) {
-                completions.add("transferHealth");
+                commands.add("transferHealth");
             }
             if (sender.hasPermission("dp.help")) {
-                completions.add("help");
+                commands.add("help");
             }
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("transferMaxHealth")) {
-            // Autocomplete player names
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                completions.add(player.getName());
+            for (String commandOption : commands) {
+                if (commandOption.toLowerCase().startsWith(args[0].toLowerCase())) {
+                    completions.add(commandOption);
+                }
             }
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("transferHealth")) {
-            // Autocomplete player names
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                completions.add(player.getName());
+        } else if (args.length == 2) {
+            if (args[0].equals("transferHealth") || args[0].equals("transferMaxHealth")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    completions.add(player.getName());
+                }
+            }
+        } else if (args.length == 3) {
+            if (args[0].equals("transferHealth") || args[0].equals("transferMaxHealth")) {
+                completions.add("<amount>");
             }
         }
         return completions;

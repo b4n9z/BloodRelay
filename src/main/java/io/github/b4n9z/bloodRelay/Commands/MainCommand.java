@@ -5,16 +5,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MainCommand implements CommandExecutor {
-    private final Map<String, CommandExecutor> subCommands = new HashMap<>();
+    private final TransferHealthCommand transferHealthCommand;
+    private final TransferMaxHealthCommand transferMaxHealthCommand;
+    private final HelpCommand helpCommand;
 
     public MainCommand(BloodRelay plugin) {
-        subCommands.put("transferMaxHealth", new TransferMaxHealthCommand(plugin));
-        subCommands.put("transferHealth", new TransferHealthCommand(plugin));
-        subCommands.put("help", new HelpCommand());
+        this.transferHealthCommand = new TransferHealthCommand(plugin);
+        this.transferMaxHealthCommand = new TransferMaxHealthCommand(plugin);
+        this.helpCommand = new HelpCommand();
     }
 
     @Override
@@ -24,12 +23,15 @@ public class MainCommand implements CommandExecutor {
             return false;
         }
 
-        CommandExecutor executor = subCommands.get(args[0].toLowerCase());
-        if (executor == null) {
-            sender.sendMessage("Unknown subcommand.");
-            return false;
-        }
-
-        return executor.onCommand(sender, command, label, args);
+        String subcommand = args[0];
+        return switch (subcommand) {
+            case "transferHealth" -> transferHealthCommand.onCommand(sender, command, label, args);
+            case "transferMaxHealth" -> transferMaxHealthCommand.onCommand(sender, command, label, args);
+            case "help" -> helpCommand.onCommand(sender, command, label, args);
+            default -> {
+                sender.sendMessage("Invalid subcommand.");
+                yield true;
+            }
+        };
     }
 }

@@ -1,0 +1,13 @@
+name: BloodRelay
+version: '1.0.0'
+main: io.github.b4n9z.bloodRelay.BloodRelay
+api-version: '1.21'
+authors: [ b4n9z ]
+description: A simple plugin to transfer health between players.
+
+commands:
+  BloodRelay:
+    aliases: [ br ]
+    usage: /br <subcommand>
+    description: Main command for the BloodRelay plugin
+    permission: br.admin

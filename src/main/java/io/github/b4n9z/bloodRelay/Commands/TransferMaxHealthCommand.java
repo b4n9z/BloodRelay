@@ -36,7 +36,7 @@ public class TransferMaxHealthCommand implements CommandExecutor {
             Player targetPlayer = Bukkit.getPlayer(args[1]);
             if (targetPlayer == null) {
                 sender.sendMessage("Player not found.");
-                return false;
+                return true;
             }
 
             double amount;
@@ -44,7 +44,7 @@ public class TransferMaxHealthCommand implements CommandExecutor {
                 amount = Double.parseDouble(args[2]);
             } catch (NumberFormatException e) {
                 sender.sendMessage("Invalid number format for max health.");
-                return false;
+                return true;
             }
 
             TextComponent confirmMessage = new TextComponent("Are you sure you want to transfer " + amount + " max health from " + sourcePlayer.getName() + " to " + targetPlayer.getName() + "? ");
@@ -73,13 +73,13 @@ public class TransferMaxHealthCommand implements CommandExecutor {
                         amount = Double.parseDouble(args[3]);
                     } catch (NumberFormatException e) {
                         sender.sendMessage("Invalid number format for max health.");
-                        return false;
+                        return true;
                     }
 
                     double sourceMaxHealth = HealthManager.getMaxHealth(sourcePlayer);
                     if (sourceMaxHealth < amount) {
                         sender.sendMessage("You do not have enough max health to transfer.");
-                        return false;
+                        return true;
                     }
 
                     // Transfer max health
@@ -97,7 +97,7 @@ public class TransferMaxHealthCommand implements CommandExecutor {
             return true;
         } else {
             sender.sendMessage("Usage: /BloodRelay transfer <targetPlayer> <amount>");
-            return false;
+            return true;
         }
     }
 }
